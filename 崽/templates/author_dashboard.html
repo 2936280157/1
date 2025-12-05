@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}作者后台{% endblock %}
+
+{% block content %}
+<div class="card">
+
+    <!-- ✅ 专栏名展示在最上面 -->
+    <div style="font-size:18px; font-weight:700; margin-bottom:6px;">
+        {{ author.column_name or "（未设置专栏名称）" }}
+    </div>
+
+    <div class="card-header" style="padding-top:4px;">
+        <div>
+            <div class="card-title">作者后台</div>
+            <div class="card-subtitle">欢迎回来，{{ author.pen_name }}</div>
+        </div>
+    </div>
+
+    <!-- ✅ 修改专栏名 -->
+    <div class="card" style="padding:10px; margin-top:8px; box-shadow:none; border-radius:14px;">
+        <form method="post" action="{{ url_for('author_update_column', author_id=author.id) }}">
+            <div class="form-group">
+                <label class="form-label">专栏名称</label>
+                <input class="form-control" type="text" name="column_name"
+                       value="{{ author.column_name or '' }}"
+                       placeholder="输入你的专栏名称">
+            </div>
+            <button type="submit" class="btn btn-primary">保存专栏名称</button>
+        </form>
+    </div>
+
+    <hr style="margin:16px 0; border:none; border-top:1px solid #eee;">
+
+    <h4 style="font-size:15px;">我的小说</h4>
+    <ul style="list-style:none; padding-left:0;">
+        {% for book in author.books %}
+        <li style="margin-bottom:6px;">
+            <a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a>
+        </li>
+        {% else %}
+        <li class="meta-text">你还没有创建小说。</li>
+        {% endfor %}
+    </ul>
+
+    <hr style="margin:16px 0; border:none; border-top:1px solid #eee;">
+
+    <h4 style="font-size:15px;">我的专辑</h4>
+    <ul style="list-style:none; padding-left:0;">
+        {% for album in author.albums %}
+        <li style="margin-bottom:6px;">
+            <a href="{{ url_for('album_view', album_id=album.id) }}">{{ album.title }}</a>
+        </li>
+        {% else %}
+        <li class="meta-text">你还没有创建专辑。</li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endblock %}
